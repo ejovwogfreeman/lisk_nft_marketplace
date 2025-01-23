@@ -201,7 +201,7 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <p className="copyright">
-            &copy; 2022 &nbsp;
+            &copy; {new Date().getFullYear()} &nbsp;
             <a href="https://github.com/codewithsadee">LISK NFT</a> in
             collaboration with&nbsp;
             <a href="https://github.com/codewithsadee">

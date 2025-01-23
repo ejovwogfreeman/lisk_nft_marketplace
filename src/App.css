@@ -875,6 +875,11 @@ header .container {
   --eerie-black-1: hsl(0, 0%, 20%);
 }
 
+.about-list svg {
+  color: var(--golden-puppy);
+  font-size: 30px;
+}
+
 /*-----------------------------------*\
  * #MEDIA QUERIES
 \*-----------------------------------*/
@@ -1152,11 +1157,6 @@ header .container {
   .about-list,
   .top-seller-list {
     grid-template-columns: repeat(3, 1fr);
-  }
-
-  .about-list svg {
-    color: var(--golden-puppy);
-    font-size: 30px;
   }
 
   /**

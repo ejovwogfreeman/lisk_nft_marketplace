@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.png";
+import { MdOutlineMenu } from "react-icons/md";
 
 const Header = () => {
   return (
@@ -17,7 +18,10 @@ const Header = () => {
         <div className="header-right">
           <div className="header-nav-wrapper">
             <button className="navbar-toggle-btn" data-navbar-toggle-btn>
-              <ion-icon name="menu-outline"></ion-icon>
+              {/* <ion-icon name="menu-outline"></ion-icon> */}
+              <span style={{ color: "white" }}>
+                <MdOutlineMenu />
+              </span>
             </button>
 
             <nav className="navbar" data-navbar>
