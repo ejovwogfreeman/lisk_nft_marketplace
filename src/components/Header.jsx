@@ -4,62 +4,62 @@ import logo from "../assets/logo.png";
 const Header = () => {
   return (
     <header>
-      <div class="container">
+      <div className="container">
         <a
           href="#"
-          class="logo"
+          className="logo"
           style={{ display: "flex", alignItems: "center", marginLeft: "-10px" }}
         >
           <img src={logo} alt="NAFT logo" width="50px" />
           <h3 style={{ color: "white", marginTop: "10px" }}>LISK NFT</h3>
         </a>
 
-        <div class="header-right">
-          <div class="header-nav-wrapper">
-            <button class="navbar-toggle-btn" data-navbar-toggle-btn>
+        <div className="header-right">
+          <div className="header-nav-wrapper">
+            <button className="navbar-toggle-btn" data-navbar-toggle-btn>
               <ion-icon name="menu-outline"></ion-icon>
             </button>
 
-            <nav class="navbar" data-navbar>
-              <ul class="navbar-list">
+            <nav className="navbar" data-navbar>
+              <ul className="navbar-list">
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Home
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     About
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Explore
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Creators
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Collections
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Blog
                   </a>
                 </li>
 
                 <li>
-                  <a href="#" class="navbar-link">
+                  <a href="#" className="navbar-link">
                     Contact
                   </a>
                 </li>
@@ -67,10 +67,14 @@ const Header = () => {
             </nav>
           </div>
 
-          <div class="header-actions">
-            <input type="search" placeholder="Search" class="search-field" />
+          <div className="header-actions">
+            <input
+              type="search"
+              placeholder="Search"
+              className="search-field"
+            />
 
-            <button class="btn btn-primary">Sign in</button>
+            <button className="btn btn-primary">Sign in</button>
           </div>
         </div>
       </div>

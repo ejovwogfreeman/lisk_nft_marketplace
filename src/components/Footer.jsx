@@ -5,12 +5,12 @@ import { FaYoutube, FaInstagram, FaTwitter, FaGithub } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer>
-      <div class="footer-top">
-        <div class="container">
-          <div class="footer-brand">
+      <div className="footer-top">
+        <div className="container">
+          <div className="footer-brand">
             <a
               href="#"
-              class="logo"
+              className="logo"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -21,23 +21,29 @@ const Footer = () => {
               <h3 style={{ color: "white", marginTop: "10px" }}>LISK NFT</h3>
             </a>
 
-            <p class="footer-brand-text">
+            <p className="footer-brand-text">
               There are many variations of passages of but the majority have
               suffered alterations cted humour, or randomsed words which htly
               believable. If you are going
             </p>
 
-            <h3 class="h4 social-title">Join the community</h3>
+            <h3 className="h4 social-title">Join the community</h3>
 
-            <ul class="social-list">
+            <ul className="social-list">
               <li>
-                <a href="https://github.com/codewithsadee" class="social-link">
+                <a
+                  href="https://github.com/codewithsadee"
+                  className="social-link"
+                >
                   <FaGithub />
                 </a>
               </li>
 
               <li>
-                <a href="https://twitter.com/codewithsadee" class="social-link">
+                <a
+                  href="https://twitter.com/codewithsadee"
+                  className="social-link"
+                >
                   <FaTwitter />
                 </a>
               </li>
@@ -45,7 +51,7 @@ const Footer = () => {
               <li>
                 <a
                   href="https://www.instagram.com/codewithsadee/"
-                  class="social-link"
+                  className="social-link"
                 >
                   <FaInstagram />
                 </a>
@@ -54,7 +60,7 @@ const Footer = () => {
               <li>
                 <a
                   href="https://www.youtube.com/c/codewithsadee"
-                  class="social-link"
+                  className="social-link"
                 >
                   <FaYoutube />
                 </a>
@@ -62,128 +68,128 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div class="footer-link-box">
-            <ul class="footer-list">
+          <div className="footer-link-box">
+            <ul className="footer-list">
               <li>
-                <h3 class="h3 footer-item-title">Marketplace</h3>
+                <h3 className="h3 footer-item-title">Marketplace</h3>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Gaming
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Product
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   All NFTs
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Social Network
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Domain Names
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Collectibles
                 </a>
               </li>
             </ul>
 
-            <ul class="footer-list">
+            <ul className="footer-list">
               <li>
-                <h3 class="h3 footer-item-title">Explore</h3>
+                <h3 className="h3 footer-item-title">Explore</h3>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Featured Drops
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Live Auctions
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   All NFTs
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Collections
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Top Seller
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Items Details
                 </a>
               </li>
             </ul>
 
-            <ul class="footer-list">
+            <ul className="footer-list">
               <li>
-                <h3 class="h3 footer-item-title">Supports</h3>
+                <h3 className="h3 footer-item-title">Supports</h3>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Settings & Privacy
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Help & Support
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Live Auctions
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Item Details
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   24/7 Supports
                 </a>
               </li>
 
-              <li class="footer-item">
-                <a href="#" class="footer-link">
+              <li className="footer-item">
+                <a href="#" className="footer-link">
                   Blog
                 </a>
               </li>
@@ -192,9 +198,9 @@ const Footer = () => {
         </div>
       </div>
 
-      <div class="footer-bottom">
-        <div class="container">
-          <p class="copyright">
+      <div className="footer-bottom">
+        <div className="container">
+          <p className="copyright">
             &copy; 2022 &nbsp;
             <a href="https://github.com/codewithsadee">LISK NFT</a> in
             collaboration with&nbsp;
@@ -203,7 +209,7 @@ const Footer = () => {
             </a>
           </p>
 
-          <div class="footer-bottom-links">
+          <div className="footer-bottom-links">
             <a href="#">Privacy Policy</a>
 
             <a href="#">Terms & Conditions</a>

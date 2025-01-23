@@ -1154,6 +1154,11 @@ header .container {
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .about-list svg {
+    color: var(--golden-puppy);
+    font-size: 30px;
+  }
+
   /**
    * FOOTER
    */
