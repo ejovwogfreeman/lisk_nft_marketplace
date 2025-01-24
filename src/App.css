@@ -311,6 +311,17 @@ header .container {
   border: 20px solid var(--eerie-black-1);
   border-radius: 50%;
   overflow: hidden;
+  animation: bounce 3s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .hero-banner img {
