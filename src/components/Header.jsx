@@ -63,7 +63,6 @@ const Header = () => {
       // Check for the current device (mobile vs desktop)
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      // If the user is on mobile, try using the deep-link method
       if (isMobile) {
         // Check if MetaMask mobile is installed
         const isMetaMaskMobileInstalled =
@@ -73,6 +72,7 @@ const Header = () => {
           // Use deep link to MetaMask mobile (works on both iOS and Android)
           const metaMaskMobileUrl = "metamask://";
           window.location.href = metaMaskMobileUrl;
+
           // Optionally add a delay before trying to connect again for better flow
           setTimeout(async () => {
             const provider = await web3Modal.connect(); // Reconnect using Web3Modal after MetaMask opens
@@ -85,12 +85,24 @@ const Header = () => {
           );
         }
       } else {
-        // Desktop devices just use Web3Modal to connect MetaMask extension
+        // Desktop devices: Check if MetaMask extension is installed
+        const isMetaMaskInstalled =
+          typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
+
+        if (!isMetaMaskInstalled) {
+          // Alert the user if MetaMask extension isn't installed
+          alert("Please install the MetaMask browser extension to connect.");
+          return; // Stop further execution
+        }
+
+        // If MetaMask is installed, use Web3Modal to connect
         const provider = await web3Modal.connect();
         handleProviderConnection(provider);
       }
     } catch (error) {
       console.error("Connection error:", error);
+
+      // Handle specific errors
       if (error.code === 4001) {
         alert("You rejected the connection request. Please try again.");
       } else {
