@@ -259,6 +259,7 @@ header .container {
 }
 
 .navbar-link:is(:hover, :focus) {
+  color: var(--red-crayola);
   background: var(--davys-gray);
 }
 
