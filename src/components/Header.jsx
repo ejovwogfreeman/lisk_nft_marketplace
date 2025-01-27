@@ -55,93 +55,93 @@ const Header = () => {
     setWeb3Modal(modal);
   }, []);
 
-  //   // Connect Wallet
-  //   const connectWallet = async () => {
-  //     if (!web3Modal) return; // Ensure web3Modal is initialized
-
-  //     try {
-  //       const provider = await web3Modal.connect(); // Prompts the user to connect their wallet
-  //       const web3 = new Web3(provider);
-
-  //       // Get accounts
-  //       const accounts = await web3.eth.getAccounts();
-  //       const userAccount = accounts[0];
-  //       setAccount(userAccount);
-
-  //       // Get balance
-  //       const walletBalance = await web3.eth.getBalance(userAccount);
-  //       const formattedBalance = web3.utils.fromWei(walletBalance, "ether");
-  //       setBalance(formattedBalance);
-
-  //       // Save to localStorage
-  //       localStorage.setItem("account", userAccount);
-  //       localStorage.setItem("balance", formattedBalance);
-  //     } catch (error) {
-  //       console.error("Connection error:", error);
-  //     }
-  //   };
-
+  // Connect Wallet
   const connectWallet = async () => {
     if (!web3Modal) return; // Ensure web3Modal is initialized
 
     try {
-      // Check for the current device (mobile vs desktop)
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const provider = await web3Modal.connect(); // Prompts the user to connect their wallet
+      const web3 = new Web3(provider);
 
-      // If the user is on mobile, try using the deep-link method
-      if (isMobile) {
-        // Check if MetaMask mobile is installed
-        const isMetaMaskMobileInstalled =
-          typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
+      // Get accounts
+      const accounts = await web3.eth.getAccounts();
+      const userAccount = accounts[0];
+      setAccount(userAccount);
 
-        if (isMetaMaskMobileInstalled) {
-          // Use deep link to MetaMask mobile (works on both iOS and Android)
-          const metaMaskMobileUrl = "metamask://";
-          window.location.href = metaMaskMobileUrl;
-          // Optionally add a delay before trying to connect again for better flow
-          setTimeout(async () => {
-            const provider = await web3Modal.connect(); // Reconnect using Web3Modal after MetaMask opens
-            handleProviderConnection(provider);
-          }, 1000);
-        } else {
-          // Alert the user if MetaMask mobile isn't installed
-          alert(
-            "Please install the MetaMask app from the App Store or Google Play."
-          );
-        }
-      } else {
-        // Desktop devices just use Web3Modal to connect MetaMask extension
-        const provider = await web3Modal.connect();
-        handleProviderConnection(provider);
-      }
+      // Get balance
+      const walletBalance = await web3.eth.getBalance(userAccount);
+      const formattedBalance = web3.utils.fromWei(walletBalance, "ether");
+      setBalance(formattedBalance);
+
+      // Save to localStorage
+      localStorage.setItem("account", userAccount);
+      localStorage.setItem("balance", formattedBalance);
     } catch (error) {
       console.error("Connection error:", error);
-      if (error.code === 4001) {
-        alert("You rejected the connection request. Please try again.");
-      } else {
-        alert(
-          "An error occurred while connecting the wallet. Please try again."
-        );
-      }
     }
   };
 
-  // Handle the connection once the provider is connected
-  const handleProviderConnection = async (provider) => {
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    const userAccount = accounts[0];
-    setAccount(userAccount);
+  // const connectWallet = async () => {
+  //   if (!web3Modal) return; // Ensure web3Modal is initialized
 
-    // Get balance
-    const walletBalance = await web3.eth.getBalance(userAccount);
-    const formattedBalance = web3.utils.fromWei(walletBalance, "ether");
-    setBalance(formattedBalance);
+  //   try {
+  //     // Check for the current device (mobile vs desktop)
+  //     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    // Save to localStorage
-    localStorage.setItem("account", userAccount);
-    localStorage.setItem("balance", formattedBalance);
-  };
+  //     // If the user is on mobile, try using the deep-link method
+  //     if (isMobile) {
+  //       // Check if MetaMask mobile is installed
+  //       const isMetaMaskMobileInstalled =
+  //         typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
+
+  //       if (isMetaMaskMobileInstalled) {
+  //         // Use deep link to MetaMask mobile (works on both iOS and Android)
+  //         const metaMaskMobileUrl = "metamask://";
+  //         window.location.href = metaMaskMobileUrl;
+  //         // Optionally add a delay before trying to connect again for better flow
+  //         setTimeout(async () => {
+  //           const provider = await web3Modal.connect(); // Reconnect using Web3Modal after MetaMask opens
+  //           handleProviderConnection(provider);
+  //         }, 1000);
+  //       } else {
+  //         // Alert the user if MetaMask mobile isn't installed
+  //         alert(
+  //           "Please install the MetaMask app from the App Store or Google Play."
+  //         );
+  //       }
+  //     } else {
+  //       // Desktop devices just use Web3Modal to connect MetaMask extension
+  //       const provider = await web3Modal.connect();
+  //       handleProviderConnection(provider);
+  //     }
+  //   } catch (error) {
+  //     console.error("Connection error:", error);
+  //     if (error.code === 4001) {
+  //       alert("You rejected the connection request. Please try again.");
+  //     } else {
+  //       alert(
+  //         "An error occurred while connecting the wallet. Please try again."
+  //       );
+  //     }
+  //   }
+  // };
+
+  // // Handle the connection once the provider is connected
+  // const handleProviderConnection = async (provider) => {
+  //   const web3 = new Web3(provider);
+  //   const accounts = await web3.eth.getAccounts();
+  //   const userAccount = accounts[0];
+  //   setAccount(userAccount);
+
+  //   // Get balance
+  //   const walletBalance = await web3.eth.getBalance(userAccount);
+  //   const formattedBalance = web3.utils.fromWei(walletBalance, "ether");
+  //   setBalance(formattedBalance);
+
+  //   // Save to localStorage
+  //   localStorage.setItem("account", userAccount);
+  //   localStorage.setItem("balance", formattedBalance);
+  // };
 
   // Disconnect Wallet
   const disconnectWallet = () => {
