@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BiWallet } from "react-icons/bi";
 import { BiFolder } from "react-icons/bi";
 import { BiDiamond } from "react-icons/bi";
 import { BiCard } from "react-icons/bi";
+import { Web3Context } from "../contexts/nftContext";
 
 const Home = () => {
+  // const {} = useContext(Web3Context);
   return (
     <main>
       <article>

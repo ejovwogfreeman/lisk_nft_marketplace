@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import logo from "../assets/logo.png";
 import { MdOutlineMenu } from "react-icons/md";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import { FaWallet } from "react-icons/fa6";
+import { Web3Context } from "../contexts/nftContext";
 
 const Header = () => {
+  const { account, balance, connectWallet, disconnectWallet } =
+    useContext(Web3Context);
+
   // State to manage navbar visibility and wallet details
   const [isNavbarActive, setIsNavbarActive] = useState(false);
-  const [account, setAccount] = useState(null);
-  const [balance, setBalance] = useState(null);
-  const [web3Modal, setWeb3Modal] = useState(null);
+  // const [account, setAccount] = useState(null);
+  // const [balance, setBalance] = useState(null);
+  // const [web3Modal, setWeb3Modal] = useState(null);
 
   // Toggle function for the navbar
   const toggleNavbar = () => {
@@ -37,109 +41,6 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // Check for saved account on component mount
-  useEffect(() => {
-    const savedAccount = localStorage.getItem("account");
-    const savedBalance = localStorage.getItem("balance");
-
-    if (savedAccount && savedBalance) {
-      setAccount(savedAccount);
-      setBalance(savedBalance);
-    }
-  }, []);
-
-  // Initialize Web3Modal once
-  useEffect(() => {
-    const modal = new Web3Modal();
-    setWeb3Modal(modal);
-  }, []);
-
-  // Connect Wallet
-  const connectWallet = async () => {
-    if (!web3Modal) return; // Ensure web3Modal is initialized
-
-    try {
-      // Check for the current device (mobile vs desktop)
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        // Check if MetaMask mobile is installed
-        const isMetaMaskMobileInstalled =
-          typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
-
-        if (isMetaMaskMobileInstalled) {
-          // Use deep link to MetaMask mobile (works on both iOS and Android)
-          const metaMaskMobileUrl = "metamask://";
-          window.location.href = metaMaskMobileUrl;
-
-          // Optionally add a delay before trying to connect again for better flow
-          setTimeout(async () => {
-            const provider = await web3Modal.connect(); // Reconnect using Web3Modal after MetaMask opens
-            handleProviderConnection(provider);
-          }, 1000);
-        } else {
-          // Alert the user if MetaMask mobile isn't installed
-          alert(
-            "Please install the MetaMask app from the App Store or Google Play."
-          );
-        }
-      } else {
-        // Desktop devices: Check if MetaMask extension is installed
-        const isMetaMaskInstalled =
-          typeof window.ethereum !== "undefined" && window.ethereum.isMetaMask;
-
-        if (!isMetaMaskInstalled) {
-          // Alert the user if MetaMask extension isn't installed
-          alert("Please install the MetaMask browser extension to connect.");
-          return; // Stop further execution
-        }
-
-        // If MetaMask is installed, use Web3Modal to connect
-        const provider = await web3Modal.connect();
-        handleProviderConnection(provider);
-      }
-    } catch (error) {
-      console.error("Connection error:", error);
-
-      // Handle specific errors
-      if (error.code === 4001) {
-        alert("You rejected the connection request. Please try again.");
-      } else {
-        alert(
-          "An error occurred while connecting the wallet. Please try again."
-        );
-      }
-    }
-  };
-
-  // Handle the connection once the provider is connected
-  const handleProviderConnection = async (provider) => {
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    const userAccount = accounts[0];
-    setAccount(userAccount);
-
-    // Get balance
-    const walletBalance = await web3.eth.getBalance(userAccount);
-    const formattedBalance = web3.utils.fromWei(walletBalance, "ether");
-    setBalance(formattedBalance);
-
-    // Save to localStorage
-    localStorage.setItem("account", userAccount);
-    localStorage.setItem("balance", formattedBalance);
-  };
-
-  // Disconnect Wallet
-  const disconnectWallet = () => {
-    setAccount(null);
-    setBalance(null);
-    localStorage.removeItem("account");
-    localStorage.removeItem("balance");
-    if (web3Modal) {
-      web3Modal.clearCachedProvider(); // Clear the cached provider from Web3Modal
-    }
-  };
 
   return (
     <header>
@@ -203,7 +104,7 @@ const Header = () => {
                   </li>
                 ) : null}
                 {isNavbarActive ? (
-                  <li onClick={connectWallet}>
+                  <li>
                     <a
                       href="#"
                       className="navbar-link"
@@ -215,7 +116,7 @@ const Header = () => {
                       <span style={{ marginTop: "5px", marginRight: "5px" }}>
                         <FaWallet />
                       </span>
-                      <span>
+                      <span onClick={connectWallet}>
                         {account
                           ? `Connected | ${balance} ETH`
                           : "Connect Wallet"}
@@ -237,7 +138,6 @@ const Header = () => {
               className="search-field"
             />
             <button
-              onClick={connectWallet}
               className="btn btn-primary"
               style={{
                 display: "flex",
@@ -247,7 +147,7 @@ const Header = () => {
               <span style={{ marginTop: "5px", marginRight: "5px" }}>
                 <FaWallet />
               </span>
-              <span>
+              <span onClick={connectWallet}>
                 {account ? `Connected | ${balance} ETH` : "Connect Wallet"}
               </span>
             </button>
