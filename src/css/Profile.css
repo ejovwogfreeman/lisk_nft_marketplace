@@ -1,0 +1,16 @@
+.container {
+  position: relative;
+}
+
+.profile {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: absolute;
+  top: -150px;
+  border: 10px solid black;
+}
+
+.account-info {
+  padding-top: 30px;
+}

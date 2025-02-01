@@ -202,11 +202,9 @@ const Footer = () => {
         <div className="container">
           <p className="copyright">
             &copy; {new Date().getFullYear()} &nbsp;
-            <a href="https://github.com/codewithsadee">LISK NFT</a> in
-            collaboration with&nbsp;
-            <a href="https://github.com/codewithsadee">
-              Testrogen Innovation Hub
-            </a>
+            <a href="https://x.com/LiskHQ">LISK NFT</a> in collaboration
+            with&nbsp;
+            <a href="https://x.com/TestrogenHub">Testrogen Innovation Hub</a>
           </p>
 
           <div className="footer-bottom-links">
