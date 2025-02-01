@@ -46,7 +46,7 @@ const Header = () => {
       <div className="container">
         {/* Logo Section */}
         <a
-          href="#"
+          href="/"
           className="logo"
           style={{ display: "flex", alignItems: "center", marginLeft: "-10px" }}
         >
@@ -69,31 +69,32 @@ const Header = () => {
 
             {/* Navbar */}
             <nav
+              style={{ zIndex: "100" }}
               className={`navbar ${isNavbarActive ? "active" : ""}`} // Dynamically add 'active' class
             >
-              <ul className="navbar-list" style={{ zIndex: "10000000" }}>
+              <ul className="navbar-list">
                 <li>
-                  <a href="#" className="navbar-link">
+                  <a href="" className="navbar-link">
                     Home
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="navbar-link">
+                  <a href="" className="navbar-link">
                     Explore
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="navbar-link">
+                  <a href="" className="navbar-link">
                     Creators
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="navbar-link">
+                  <a href="" className="navbar-link">
                     Collections
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="navbar-link">
+                  <a href="" className="navbar-link">
                     Contact
                   </a>
                 </li>
@@ -112,7 +113,6 @@ const Header = () => {
                 {isNavbarActive ? (
                   <li>
                     <a
-                      href="#"
                       className="navbar-link"
                       style={{
                         display: "flex",
@@ -144,6 +144,7 @@ const Header = () => {
               className="search-field"
             />
             <button
+              onClick={connectWallet}
               className="btn btn-primary"
               style={{
                 display: "flex",
@@ -153,7 +154,7 @@ const Header = () => {
               <span style={{ marginTop: "5px", marginRight: "5px" }}>
                 <FaWallet />
               </span>
-              <span onClick={connectWallet}>
+              <span>
                 {account ? `Connected | ${balance} ETH` : "Connect Wallet"}
               </span>
             </button>

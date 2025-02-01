@@ -11,7 +11,7 @@ const Home = () => {
     <main>
       <article>
         <section className="hero">
-          <div className="container" style={{ zIndex: "-1" }}>
+          <div className="container">
             <div className="hero-content">
               <h1 className="h1 hero-title">
                 Discover digital art sell your specific <span>NFT</span>
@@ -23,9 +23,13 @@ const Home = () => {
               </p>
 
               <div className="btn-group">
-                <button className="btn btn-primary">Explore more</button>
+                <a href="/explore" className="btn btn-primary">
+                  Explore more
+                </a>
 
-                <button className="btn btn-secondary">Create now</button>
+                <a href="/create" className="btn btn-secondary">
+                  Create now
+                </a>
               </div>
             </div>
 
