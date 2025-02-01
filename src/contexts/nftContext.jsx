@@ -1,162 +1,261 @@
-import React, { createContext, useState, useEffect } from "react";
-import Web3 from "web3";
-import nftABI from "../utils/nftABI.json"; // Your smart contract ABI
+// import React, { useEffect, useState, createContext, useContext } from "react";
+// import Web3 from "web3";
+// import nftABI from "../utils/nftABI.json";
 
-const LISK_SEPOLIA_RPC = "https://rpc.sepolia-api.lisk.com"; // Lisk Sepolia RPC
-const CONTRACT_ADDRESS = "0xc6ece30cf46062d354fb748e99942460b964ab87"; // Replace with your NFT contract address
+// // Create a context for Web3
+// export const Web3Context = createContext();
+
+// // Custom hook to use the Web3 context
+// // export const useWeb3 = () => useContext(Web3Context);
+
+// export function Web3Provider({ children }) {
+//   const [web3, setWeb3] = useState(null);
+//   const [account, setAccount] = useState(null);
+//   const [connected, setConnected] = useState(false);
+//   const [contract, setContract] = useState(null);
+
+//   useEffect(() => {
+//     if (window.ethereum) {
+//       const web3Instance = new Web3(window.ethereum);
+//       setWeb3(web3Instance);
+//     }
+//   }, []);
+
+//   const contractAddress = "0xc6ece30cf46062d354fb748e99942460b964ab87";
+
+//   const connectWallet = async () => {
+//     try {
+//       await window.ethereum.request({ method: "eth_requestAccounts" });
+//       const accounts = await web3.eth.getAccounts();
+//       const account = accounts[0];
+//       const currentChainId = await window.ethereum.request({
+//         method: "eth_chainId",
+//       });
+//       console.log(currentChainId);
+//       if (currentChainId !== "0x106a") {
+//         // Ensure this matches the Core testnet chain ID
+//         alert("Connect lisk testnet");
+//         return;
+//       }
+//       const instance = new web3.eth.Contract(nftABI.abi, contractAddress);
+//       setContract(instance);
+//       console.log(account);
+//       setAccount(account);
+//       setConnected(true);
+//     } catch (error) {
+//       console.error("Error connecting wallet:", error);
+//     }
+//   };
+
+//   const disconnectWallet = () => {
+//     setAccount(null);
+//     setConnected(false);
+//     setContract(null);
+//   };
+
+//   // Function to list all NFTs on the blockchain
+//   const listAllNFTs = async () => {
+//     // if (!contract) return alert("Contract not initialized!");
+
+//     try {
+//       // setLoading(true);
+//       // setError(null);
+//       const nfts = await contract;
+//       // const nfts = await contract.methods.listExistingNFT().call();
+//       console.log("All NFTs:", nfts);
+//       // setLoading(false);
+//       return nfts;
+//     } catch (error) {
+//       // setLoading(false);
+//       console.error("Fetching NFTs Failed:", error);
+//       setError("Failed to fetch NFTs. Please try again.");
+//     }
+//   };
+
+//   return (
+//     <Web3Context.Provider
+//       value={{
+//         web3,
+//         account,
+//         disconnectWallet,
+//         connectWallet,
+//         listAllNFTs,
+//         connected,
+//         contract,
+//       }}
+//     >
+//       <div>{children}</div>
+//     </Web3Context.Provider>
+//   );
+// }
+
+import React, { useEffect, useState, createContext } from "react";
+import Web3 from "web3";
+import nftABI from "../utils/nftABI.json";
 
 export const Web3Context = createContext();
 
-export const Web3Provider = ({ children }) => {
+export function Web3Provider({ children }) {
   const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(
+    localStorage.getItem("account") || null
+  );
+  const [connected, setConnected] = useState(!!localStorage.getItem("account"));
   const [contract, setContract] = useState(null);
-  const [account, setAccount] = useState(null);
-  const [balance, setBalance] = useState(null); // Added state for balance
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [balance, setBalance] = useState(
+    localStorage.getItem("balance") || null
+  );
 
-  // Initialize Web3 and contract
+  const contractAddress = "0xc6ece30cf46062d354fb748e99942460b964ab87";
+
   useEffect(() => {
-    const web3Instance = new Web3(LISK_SEPOLIA_RPC);
-    setWeb3(web3Instance);
+    async function loadWeb3() {
+      if (window.ethereum) {
+        const provider = window.ethereum.providers
+          ? window.ethereum.providers.find((p) => p.isMetaMask) ||
+            window.ethereum
+          : window.ethereum;
 
-    const contractInstance = new web3Instance.eth.Contract(
-      nftABI,
-      CONTRACT_ADDRESS
-    );
-    setContract(contractInstance);
+        if (!provider.isMetaMask) {
+          console.warn("MetaMask is required.");
+          return;
+        }
 
-    // Load wallet info from localStorage if available
-    const savedAccount = localStorage.getItem("account");
-    const savedBalance = localStorage.getItem("balance");
-    if (savedAccount && savedBalance) {
-      setAccount(savedAccount);
-      setBalance(savedBalance);
+        const web3Instance = new Web3(provider);
+        setWeb3(web3Instance);
+      } else {
+        console.warn("MetaMask not detected.");
+      }
     }
-
-    return () => {
-      setWeb3(null);
-      setContract(null);
-      setAccount(null);
-      setBalance(null); // Clean up balance state when component is unmounted
-    };
+    loadWeb3();
   }, []);
 
-  // Connect wallet function
-  const connectWallet = async () => {
-    if (!window.ethereum) return alert("MetaMask not installed!");
-
+  const switchToLiskTestnet = async () => {
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x106a" }],
       });
-      setAccount(accounts[0]);
-
-      // Get the balance of the connected wallet
-      const walletBalance = await web3.eth.getBalance(accounts[0]);
-      const balanceInEth = web3.utils.fromWei(walletBalance, "ether"); // Convert balance from wei to ether
-      setBalance(balanceInEth); // Set the balance state
-
-      // Save account and balance to localStorage
-      localStorage.setItem("account", accounts[0]);
-      localStorage.setItem("balance", balanceInEth);
-
-      console.log("Wallet Balance:", balanceInEth);
+      return true;
     } catch (error) {
-      console.error("Wallet connection failed:", error);
-      setError("Wallet connection failed. Please try again.");
+      if (error.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x106a",
+                chainName: "Lisk Sepolia Testnet",
+                rpcUrls: ["https://rpc.sepolia-api.lisk.com"],
+                blockExplorerUrls: ["https://sepolia-blockscout.lisk.com"],
+              },
+            ],
+          });
+          return true;
+        } catch (addError) {
+          console.error("Error adding Lisk Testnet:", addError);
+        }
+      } else {
+        console.error("Error switching network:", error);
+      }
+      return false;
     }
   };
 
-  // Disconnect wallet function
+  const connectWallet = async () => {
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask is required.");
+        return;
+      }
+
+      const provider = window.ethereum.providers
+        ? window.ethereum.providers.find((p) => p.isMetaMask) || window.ethereum
+        : window.ethereum;
+
+      if (!provider.isMetaMask) {
+        alert("MetaMask is required. Please disable other wallets.");
+        return;
+      }
+
+      await provider.request({ method: "eth_requestAccounts" });
+
+      setTimeout(async () => {
+        const web3Instance = new Web3(provider);
+        setWeb3(web3Instance);
+
+        const accounts = await web3Instance.eth.getAccounts();
+        if (!accounts.length) {
+          alert("No account found.");
+          return;
+        }
+
+        const currentChainId = await provider.request({
+          method: "eth_chainId",
+        });
+
+        if (currentChainId !== "0x106a") {
+          const switched = await switchToLiskTestnet();
+          if (!switched) {
+            alert("Please switch to Lisk Testnet (0x106a). ");
+            return;
+          }
+        }
+
+        const instance = new web3Instance.eth.Contract(
+          nftABI.abi,
+          contractAddress
+        );
+        setContract(instance);
+        setAccount(accounts[0]);
+        setConnected(true);
+
+        // Get the balance of the connected wallet
+        const walletBalance = await web3Instance.eth.getBalance(accounts[0]);
+        const balanceInEth = web3Instance.utils.fromWei(walletBalance, "ether");
+        setBalance(balanceInEth);
+
+        // Save to localStorage
+        localStorage.setItem("account", accounts[0]);
+        localStorage.setItem("balance", balanceInEth);
+
+        console.log("Wallet Connected:", accounts[0]);
+        console.log("Wallet Balance:", balanceInEth);
+      }, 1000);
+    } catch (error) {
+      console.error("Error connecting wallet:", error);
+    }
+  };
+
   const disconnectWallet = () => {
     setAccount(null);
-    setBalance(null); // Reset balance when disconnecting wallet
-    setError(null);
-    console.log("Wallet disconnected");
-
-    // Remove account and balance from localStorage
+    setConnected(false);
+    setContract(null);
+    setBalance(null);
     localStorage.removeItem("account");
     localStorage.removeItem("balance");
   };
 
-  // Create NFT function
-  const createNFT = async (tokenURI) => {
-    if (!contract || !account) return alert("Connect wallet first!");
-    if (!tokenURI) return alert("Token URI is required!");
-
-    try {
-      setLoading(true);
-      setError(null);
-      const tx = await contract.methods
-        .createNFT(tokenURI)
-        .send({ from: account });
-      console.log("NFT Created Successfully:", tx);
-      setLoading(false);
-      return tx;
-    } catch (error) {
-      setLoading(false);
-      console.error("NFT Creation Failed:", error);
-      setError("NFT creation failed. Please try again.");
-    }
-  };
-
-  // Mint NFT function
-  const mintNFT = async () => {
-    if (!contract || !account) return alert("Connect wallet first!");
-
-    try {
-      setLoading(true);
-      setError(null);
-      const tx = await contract.methods.mintNFT().send({ from: account });
-      console.log("Minting Successful:", tx);
-      setLoading(false);
-      return tx;
-    } catch (error) {
-      setLoading(false);
-      console.error("Minting Failed:", error);
-      setError("Minting failed. Please try again.");
-    }
-  };
-
-  // Buy NFT function
-  const buyNFT = async (tokenId, price) => {
-    if (!contract || !account) return alert("Connect wallet first!");
-
-    try {
-      setLoading(true);
-      setError(null);
-      const tx = await contract.methods.buyNFT(tokenId).send({
-        from: account,
-        value: web3.utils.toWei(price, "ether"),
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", () => {
+        window.location.reload();
       });
-      console.log("NFT Purchased:", tx);
-      setLoading(false);
-      return tx;
-    } catch (error) {
-      setLoading(false);
-      console.error("Buying Failed:", error);
-      setError("Buying failed. Please try again.");
     }
-  };
+  }, []);
 
-  // Sell NFT function
-  const sellNFT = async (tokenId, price) => {
-    if (!contract || !account) return alert("Connect wallet first!");
-
+  const listAllNFTs = async () => {
+    if (!contract) {
+      console.warn("Contract not initialized!");
+      return [];
+    }
     try {
-      setLoading(true);
-      setError(null);
-      const tx = await contract.methods
-        .sellNFT(tokenId, web3.utils.toWei(price, "ether"))
-        .send({ from: account });
-      console.log("NFT Listed for Sale:", tx);
-      setLoading(false);
-      return tx;
+      const nfts = await contract.methods.listExistingNFT().call();
+      console.log("All NFTs:", nfts);
+      return nfts;
     } catch (error) {
-      setLoading(false);
-      console.error("Selling Failed:", error);
-      setError("Selling failed. Please try again.");
+      console.error("Fetching NFTs Failed:", error);
+      return [];
     }
   };
 
@@ -164,20 +263,16 @@ export const Web3Provider = ({ children }) => {
     <Web3Context.Provider
       value={{
         web3,
-        contract,
         account,
-        balance, // Export the balance so it can be accessed in other components
+        balance,
         connectWallet,
         disconnectWallet,
-        mintNFT,
-        buyNFT,
-        sellNFT,
-        createNFT,
-        loading,
-        error,
+        listAllNFTs,
+        connected,
+        contract,
       }}
     >
       {children}
     </Web3Context.Provider>
   );
-};
+}
