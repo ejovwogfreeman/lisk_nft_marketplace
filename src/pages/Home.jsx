@@ -11,7 +11,7 @@ const Home = () => {
     <main>
       <article>
         <section className="hero">
-          <div className="container">
+          <div className="container" style={{ zIndex: "-1" }}>
             <div className="hero-content">
               <h1 className="h1 hero-title">
                 Discover digital art sell your specific <span>NFT</span>

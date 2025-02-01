@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import logo from "../assets/logo.png";
 import { MdOutlineMenu } from "react-icons/md";
-import Web3 from "web3";
-import Web3Modal from "web3modal";
 import { FaWallet } from "react-icons/fa6";
 import { Web3Context } from "../contexts/nftContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { account, balance, connectWallet, disconnectWallet } =
@@ -72,7 +71,7 @@ const Header = () => {
             <nav
               className={`navbar ${isNavbarActive ? "active" : ""}`} // Dynamically add 'active' class
             >
-              <ul className="navbar-list" style={{ zIndex: "10000" }}>
+              <ul className="navbar-list" style={{ zIndex: "10000000" }}>
                 <li>
                   <a href="#" className="navbar-link">
                     Home
@@ -99,9 +98,16 @@ const Header = () => {
                   </a>
                 </li>
                 {account ? (
-                  <li onClick={disconnectWallet}>
-                    <a className="navbar-link">Logout</a>
-                  </li>
+                  <>
+                    <li>
+                      <Link to="/profile" className="navbar-link">
+                        Profile
+                      </Link>
+                    </li>
+                    <li onClick={disconnectWallet}>
+                      <a className="navbar-link">Logout</a>
+                    </li>
+                  </>
                 ) : null}
                 {isNavbarActive ? (
                   <li>
