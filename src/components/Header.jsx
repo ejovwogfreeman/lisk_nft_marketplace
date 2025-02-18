@@ -124,7 +124,7 @@ const Header = () => {
                       </span>
                       <span onClick={connectWallet}>
                         {account
-                          ? `Connected | ${balance} ETH`
+                          ? `Connected | ${parseFloat(balance).toFixed(2)} ETH`
                           : "Connect Wallet"}
                       </span>
                     </a>
