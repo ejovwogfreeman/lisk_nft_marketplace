@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
 import { Web3Context } from "./contexts/nftContext";
+import GetNFTs from "./pages/GetNFTs";
 
 function ProtectedRoute({ element }) {
   const { account } = useContext(Web3Context);
@@ -27,6 +28,10 @@ function App() {
         <Route
           path="/profile"
           element={<ProtectedRoute element={<Profile />} />}
+        />
+        <Route
+          path="/get_nfts"
+          element={<ProtectedRoute element={<GetNFTs />} />}
         />
       </Routes>
       <Footer />

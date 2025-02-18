@@ -6,8 +6,8 @@ import { BiCard } from "react-icons/bi";
 import { Web3Context } from "../contexts/nftContext";
 
 const Home = () => {
-  const { listAllNFTs } = useContext(Web3Context);
-  console.log(listAllNFTs());
+  // const { listAllNFTs } = useContext(Web3Context);
+  // console.log(listAllNFTs());
   return (
     <main>
       <article>

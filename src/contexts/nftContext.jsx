@@ -1,94 +1,3 @@
-// import React, { useEffect, useState, createContext, useContext } from "react";
-// import Web3 from "web3";
-// import nftABI from "../utils/nftABI.json";
-
-// // Create a context for Web3
-// export const Web3Context = createContext();
-
-// // Custom hook to use the Web3 context
-// // export const useWeb3 = () => useContext(Web3Context);
-
-// export function Web3Provider({ children }) {
-//   const [web3, setWeb3] = useState(null);
-//   const [account, setAccount] = useState(null);
-//   const [connected, setConnected] = useState(false);
-//   const [contract, setContract] = useState(null);
-
-//   useEffect(() => {
-//     if (window.ethereum) {
-//       const web3Instance = new Web3(window.ethereum);
-//       setWeb3(web3Instance);
-//     }
-//   }, []);
-
-//   const contractAddress = "0xc6ece30cf46062d354fb748e99942460b964ab87";
-
-//   const connectWallet = async () => {
-//     try {
-//       await window.ethereum.request({ method: "eth_requestAccounts" });
-//       const accounts = await web3.eth.getAccounts();
-//       const account = accounts[0];
-//       const currentChainId = await window.ethereum.request({
-//         method: "eth_chainId",
-//       });
-//       console.log(currentChainId);
-//       if (currentChainId !== "0x106a") {
-//         // Ensure this matches the Core testnet chain ID
-//         alert("Connect lisk testnet");
-//         return;
-//       }
-//       const instance = new web3.eth.Contract(nftABI.abi, contractAddress);
-//       setContract(instance);
-//       console.log(account);
-//       setAccount(account);
-//       setConnected(true);
-//     } catch (error) {
-//       console.error("Error connecting wallet:", error);
-//     }
-//   };
-
-//   const disconnectWallet = () => {
-//     setAccount(null);
-//     setConnected(false);
-//     setContract(null);
-//   };
-
-//   // Function to list all NFTs on the blockchain
-//   const listAllNFTs = async () => {
-//     // if (!contract) return alert("Contract not initialized!");
-
-//     try {
-//       // setLoading(true);
-//       // setError(null);
-//       const nfts = await contract;
-//       // const nfts = await contract.methods.listExistingNFT().call();
-//       console.log("All NFTs:", nfts);
-//       // setLoading(false);
-//       return nfts;
-//     } catch (error) {
-//       // setLoading(false);
-//       console.error("Fetching NFTs Failed:", error);
-//       setError("Failed to fetch NFTs. Please try again.");
-//     }
-//   };
-
-//   return (
-//     <Web3Context.Provider
-//       value={{
-//         web3,
-//         account,
-//         disconnectWallet,
-//         connectWallet,
-//         listAllNFTs,
-//         connected,
-//         contract,
-//       }}
-//     >
-//       <div>{children}</div>
-//     </Web3Context.Provider>
-//   );
-// }
-
 import React, { useEffect, useState, createContext } from "react";
 import Web3 from "web3";
 import nftABI from "../utils/nftABI.json";
@@ -105,6 +14,7 @@ export function Web3Provider({ children }) {
   const [balance, setBalance] = useState(
     localStorage.getItem("balance") || null
   );
+  const [nfts, setNfts] = useState([]); // State for NFTs
 
   const contractAddress = "0xc6ece30cf46062d354fb748e99942460b964ab87";
 
@@ -210,12 +120,10 @@ export function Web3Provider({ children }) {
         setAccount(accounts[0]);
         setConnected(true);
 
-        // Get the balance of the connected wallet
         const walletBalance = await web3Instance.eth.getBalance(accounts[0]);
         const balanceInEth = web3Instance.utils.fromWei(walletBalance, "ether");
         setBalance(balanceInEth);
 
-        // Save to localStorage
         localStorage.setItem("account", accounts[0]);
         localStorage.setItem("balance", balanceInEth);
 
@@ -237,27 +145,30 @@ export function Web3Provider({ children }) {
   };
 
   useEffect(() => {
+    if (contract) {
+      // Fetch NFTs only after the contract is initialized
+      const fetchNFTs = async () => {
+        try {
+          const nftsList = await contract.methods.listExistingNFT().call();
+          setNfts(nftsList);
+        } catch (error) {
+          console.error("Fetching NFTs Failed:", error);
+        }
+      };
+
+      fetchNFTs();
+    }
+  }, [contract]); // Only trigger this useEffect when the contract is available
+
+  console.log(nfts);
+
+  useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on("chainChanged", () => {
         window.location.reload();
       });
     }
   }, []);
-
-  const listAllNFTs = async () => {
-    if (!contract) {
-      console.warn("Contract not initialized!");
-      return [];
-    }
-    try {
-      const nfts = await contract.methods.listExistingNFT().call();
-      console.log("All NFTs:", nfts);
-      return nfts;
-    } catch (error) {
-      console.error("Fetching NFTs Failed:", error);
-      return [];
-    }
-  };
 
   return (
     <Web3Context.Provider
@@ -267,7 +178,7 @@ export function Web3Provider({ children }) {
         balance,
         connectWallet,
         disconnectWallet,
-        listAllNFTs,
+        nfts, // Provide nfts in context
         connected,
         contract,
       }}
